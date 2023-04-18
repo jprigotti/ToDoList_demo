@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import '../components/Forms.css'
 
 const ControlledForm = () => {
@@ -90,7 +90,7 @@ export const LoginForm = () => {
             case "username":
                 console.log(e);
                 if (value.length < 5) {
-                    setIsValid({ ...isValid, [name]: true, usernameError:""})
+                    setIsValid({ ...isValid, [name]: true, usernameError: "" })
 
                 } else {
                     setIsValid({ ...isValid, [name]: false, usernameError: "Username must be less that 5 characters" });
@@ -151,8 +151,9 @@ export const LoginForm = () => {
     )
 }
 
-
-// This is another component
+/**
+ * CREATE A NEW TICKET FORM
+ */
 
 export const NewTicket = () => {
 
@@ -165,6 +166,7 @@ export const NewTicket = () => {
 
     const [form, setForm] = useState(formInitialState);
 
+    const formRef = useRef(null);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -174,6 +176,7 @@ export const NewTicket = () => {
         })
     }
 
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -181,52 +184,52 @@ export const NewTicket = () => {
         console.log(form);
 
         const tempForm = form;
-        for (const key in form){
-            form[key]="";
+        for (const key in tempForm) {
+            tempForm[key] = "";
         }
-        setForm(form)
+        setForm(tempForm)
+
+        handleReset();
         console.log(form);
-        handleChange(e);
     }
 
+    const handleReset = () => {
+        formRef.current.reset();
+    }
 
 
 
     return (
         <div>
             <h2>Nuevo incidente</h2>
-            <form onSubmit={handleSubmit}>
+            <form ref={formRef} onSubmit={handleSubmit}>
                 <div className='container-form'>
 
                     <input
                         type="text"
                         placeholder='Ingrese su nombre'
                         name="openByName"
-                        value={form.openByName}
-                        onChange={handleChange}
+                        onBlur={handleChange}
                     ></input>
 
                     <input
                         type="text"
                         placeholder='ingrese el servicio'
                         name="openByArea"
-                        value={form.openByArea}
-                        onChange={handleChange}
+                        onBlur={handleChange}
                     ></input>
 
                     <input
                         type="text"
                         placeholder='ingrese el producto'
                         name="product"
-                        value={form.product}
-                        onChange={handleChange}
+                        onBlur={handleChange}
                     ></input>
                     <input
                         type="text"
                         placeholder='ingrese los detalles'
                         name="details"
-                        value={form.details}
-                        onChange={handleChange}
+                        onBlur={handleChange}
                     ></input>
 
                     <input type="submit" value="Submit"></input>
