@@ -151,6 +151,92 @@ export const LoginForm = () => {
     )
 }
 
+
+// This is another component
+
+export const NewTicket = () => {
+
+    const formInitialState = {
+        openByName: "",
+        openByArea: "",
+        product: "",
+        details: "",
+    }
+
+    const [form, setForm] = useState(formInitialState);
+
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setForm({
+            ...form,
+            [name]: value,
+        })
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        console.log("Submitted");
+        console.log(form);
+
+        const tempForm = form;
+        for (const key in form){
+            form[key]="";
+        }
+        setForm(form)
+        console.log(form);
+        handleChange(e);
+    }
+
+
+
+
+    return (
+        <div>
+            <h2>Nuevo incidente</h2>
+            <form onSubmit={handleSubmit}>
+                <div className='container-form'>
+
+                    <input
+                        type="text"
+                        placeholder='Ingrese su nombre'
+                        name="openByName"
+                        value={form.openByName}
+                        onChange={handleChange}
+                    ></input>
+
+                    <input
+                        type="text"
+                        placeholder='ingrese el servicio'
+                        name="openByArea"
+                        value={form.openByArea}
+                        onChange={handleChange}
+                    ></input>
+
+                    <input
+                        type="text"
+                        placeholder='ingrese el producto'
+                        name="product"
+                        value={form.product}
+                        onChange={handleChange}
+                    ></input>
+                    <input
+                        type="text"
+                        placeholder='ingrese los detalles'
+                        name="details"
+                        value={form.details}
+                        onChange={handleChange}
+                    ></input>
+
+                    <input type="submit" value="Submit"></input>
+                    <input type="reset" value="Clear"></input>
+                </div>
+            </form>
+        </div>
+    )
+}
+
 /** 
 https://www.useblackbox.io/search
 yarn add react-controlled-form
