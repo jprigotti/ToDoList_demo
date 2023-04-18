@@ -1,5 +1,6 @@
 import './App.css'
 import { LoginForm, NewTicket } from './components/Forms'
+import Card from './components/Card'
 
 function App() {
 
@@ -7,6 +8,7 @@ function App() {
     <div>
       {/* <LoginForm /> */}
       <NewTicket />
+      <Card />
     </div>
 
   )
