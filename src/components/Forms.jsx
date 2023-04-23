@@ -1,5 +1,7 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect, useDeferredValue } from 'react'
 import '../components/Forms.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { MdCheck, MdError, MdOutlineRemoveRedEye, MdRemoveRedEye } from 'react-icons/md';
 
 const ControlledForm = () => {
 
@@ -151,6 +153,23 @@ export const LoginForm = () => {
     )
 }
 
+
+
+/**
+ * THIS IS A FORM USING USEREF
+ */
+
+const FormWithUseRef = () => {
+    const inputRef = userRef({});
+    const [formData, setFormData] = useState({});
+
+
+
+
+}
+
+
+
 /**
  * CREATE A NEW TICKET FORM
  */
@@ -236,6 +255,160 @@ export const NewTicket = () => {
                     <input type="reset" value="Clear"></input>
                 </div>
             </form>
+        </div>
+    )
+}
+
+
+/** RESET PASSWORD FORM - VM WARE */
+export const ResetPassVMware = () => {
+
+    const specialCharacters = ['!', '@', '#', '$', '%', '^', '(', ')', '_', '+', '[', ']', '-', '\'', ',', '/', '?', '*'];
+
+    const [passwordInput, setPasswordInput] = useState('');
+    const [verifyPasswordInput, setVerifyPasswordInput] = useState('');
+    const [passwordsMatch, setPasswordMatch] = useState(false);
+    const [validation, setValidation] = useState({
+        length: false,
+        specialChar: false,
+        upperChar: false,
+        lowerChar: false,
+        numberChar: false,
+    });
+
+    const inputPasswordRef = useRef(null);
+    const inputVerifyPasswordRef = useRef(null);
+    const submitButtonRef = useRef(null);
+    const formRef = useRef(null);
+
+    useEffect(() => {
+        submitButtonRef.current.disabled = true;
+    }, []);
+
+    useEffect(() => {
+        passwordInput.length > 7 && passwordInput.length < 20 ?
+            setValidation((prevValidation) => ({ ...prevValidation, length: true })) :
+            setValidation((prevValidation) => ({ ...prevValidation, length: false }));
+
+        specialCharacters.find((character) => passwordInput.includes(character)) ?
+            setValidation(prevValidation => ({ ...prevValidation, specialChar: true })) :
+            setValidation(prevValidation => ({ ...prevValidation, specialChar: false }));
+
+        /[A-Z]/.test(passwordInput) ?
+            setValidation(prevValidation => ({ ...prevValidation, upperChar: true })) :
+            setValidation(prevValidation => ({ ...prevValidation, upperChar: false }));
+
+
+        // passwordInput.split("").find((character) => character === character.toLocaleLowerCase() && isNaN(character)) ?
+        /[a-z]/.test(passwordInput) ?
+            setValidation(prevValidation => ({ ...prevValidation, lowerChar: true })) :
+            setValidation(prevValidation => ({ ...prevValidation, lowerChar: false }));
+
+        passwordInput.split("").find((character) => !isNaN(character)) ?
+            setValidation((prevValidation) => ({ ...prevValidation, numberChar: true })) :
+            setValidation((prevValidation) => ({ ...prevValidation, numberChar: false }));
+
+    }, [passwordInput, verifyPasswordInput]);
+
+
+    useEffect(() => {
+        const checkPasswordMatchResult = checkPasswordMatch(validation);
+        setPasswordMatch(checkPasswordMatchResult);
+    }, [validation]);
+
+    const checkPasswordMatch = (validationState) => {
+
+        if (passwordInput != "" &&
+            passwordInput === verifyPasswordInput &&
+            Object.values(validationState).every(val => val === true)) {
+            submitButtonRef.current.disabled = false;
+            return true;
+        } else {
+            submitButtonRef.current.disabled = true;
+            return false;
+        }
+
+    }
+
+    const showPassword = (e) => {
+        (inputPasswordRef.current.type == 'text') ? inputPasswordRef.current.type = 'password' : inputPasswordRef.current.type = 'text';
+
+    }
+
+    const showVerifyPassword = (e) => {
+        (inputVerifyPasswordRef.current.type == 'text') ? inputVerifyPasswordRef.current.type = 'password' : inputVerifyPasswordRef.current.type = 'text';
+    }
+
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(`Password is ${passwordInput}`);
+        setPasswordInput("");
+        setVerifyPasswordInput("");
+
+
+    }
+
+    return (
+        <div className='container-sm' >
+            <div className='row'>
+                <h2>Reset Password</h2>
+                <p>This will update the password for the account login</p>
+            </div>
+
+            <div className='row'>
+
+                <div className='col-6'>
+                    <form ref={formRef} onSubmit={handleSubmit}>
+                        <div className='d-flex flex-column align-items-start mb-3'>
+                            <p className='-e'>{passwordsMatch ? <MdCheck /> : <MdError />} Authentincation code verified</p>
+                            <p>New Password:</p>
+                            <div className="input-inner-container">
+                                <input
+                                    ref={inputPasswordRef}
+                                    className="__inputStyle"
+                                    type="password"
+                                    name="inputPassword"
+                                    onChange={(e) => setPasswordInput(e.target.value)}
+                                    value={passwordInput}
+                                /><span><MdOutlineRemoveRedEye className='eye-icon' onClick={showPassword} /></span>
+                            </div>
+                        </div>
+
+                        <div className='d-flex flex-column align-items-start'>
+                            <p>Verify new Password:</p>
+                            <div className="input-inner-container">
+                                <input
+                                    ref={inputVerifyPasswordRef}
+                                    className="__inputStyle"
+                                    type="password"
+                                    name="inputVerifyPassword"
+                                    onChange={(e) => setVerifyPasswordInput(e.target.value)}
+                                    value={verifyPasswordInput}
+                                /><span><MdOutlineRemoveRedEye className='eye-icon' onClick={showVerifyPassword} /></span>
+                            </div>
+                        </div>
+                        <div className='d-flex justify-content-start my-3'>
+                            <input ref={submitButtonRef} type="submit" value="Submit" className='btn btn-primary'></input>
+                        </div>
+
+                    </form>
+                </div>
+
+
+
+                <div className='col-6'>
+                    <p>Password must contain al least</p>
+
+                    <ul className='d-flex flex-column align-items-start'>
+                        <li>{validation.length ? <MdCheck /> : <MdError />} 8 and at most 20 characters</li>
+                        <li>{validation.specialChar ? <MdCheck /> : <MdError />} One special character !@#$%^()_+[]-{ }',/?*</li>
+                        <li>{validation.upperChar ? <MdCheck /> : <MdError />} One upper case letter</li>
+                        <li>{validation.lowerChar ? <MdCheck /> : <MdError />} One lower case letter</li>
+                        <li>{validation.numberChar ? <MdCheck /> : <MdError />} One number</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     )
 }

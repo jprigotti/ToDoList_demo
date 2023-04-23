@@ -14,3 +14,33 @@
     margin-bottom: 0.5rem;
     height: 2rem;
 }
+
+
+.input-inner-container{
+    width: 300px;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    position: relative;
+}
+
+.__inputStyle{
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid black;
+}
+
+.__inputStyle:focus{
+    outline: none;
+}
+
+
+.eye-icon{
+    position: absolute;
+    right: 0;
+    cursor: pointer;
+}
+
+ul{
+list-style: none;
+}
