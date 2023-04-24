@@ -219,7 +219,7 @@ export const NewTicket = () => {
 
 
     return (
-        <div>
+        <div className='col-6'>
             <h2>Nuevo incidente</h2>
             <form ref={formRef} onSubmit={handleSubmit}>
                 <div className='container-form'>

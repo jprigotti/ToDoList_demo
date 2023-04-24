@@ -4,9 +4,15 @@
   margin: 0;
 }
 
+body{
+display: flex;
+align-items: flex-start;
+}
+
 #root {
   width: 100vw;
   margin: 0 auto;
   padding: 2rem;
-  text-align: center;
+  position: fixed;
+  top: 0;
 }
