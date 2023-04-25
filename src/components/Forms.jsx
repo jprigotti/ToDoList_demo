@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useDeferredValue } from 'react'
 import '../components/Forms.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { MdCheck, MdError, MdOutlineRemoveRedEye, MdRemoveRedEye } from 'react-icons/md';
+import { FaAndroid } from 'react-icons/fa';
 
 const ControlledForm = () => {
 
@@ -286,34 +287,45 @@ export const ResetPassVMware = () => {
     }, []);
 
     useEffect(() => {
-        passwordInput.length > 7 && passwordInput.length < 20 ?
-            setValidation((prevValidation) => ({ ...prevValidation, length: true })) :
-            setValidation((prevValidation) => ({ ...prevValidation, length: false }));
+        // passwordInput.length > 7 && passwordInput.length < 20 ?
+        // setValidation({...validation, ['length']: true}) :
+        // setValidation({...validation, ['length']: false});
 
-        specialCharacters.find((character) => passwordInput.includes(character)) ?
-            setValidation(prevValidation => ({ ...prevValidation, specialChar: true })) :
-            setValidation(prevValidation => ({ ...prevValidation, specialChar: false }));
+        // specialCharacters.find((character) => passwordInput.includes(character)) ?
+        //     setValidation({...validation, specialChar: true}) :
+        //     setValidation({...validation, specialChar: false});
 
-        /[A-Z]/.test(passwordInput) ?
-            setValidation(prevValidation => ({ ...prevValidation, upperChar: true })) :
-            setValidation(prevValidation => ({ ...prevValidation, upperChar: false }));
+        // /[A-Z]/.test(passwordInput) ?
+        //     setValidation({...validation, upperChar: true}) :
+        //     setValidation({...validation, upperChar: false});
 
 
-        // passwordInput.split("").find((character) => character === character.toLocaleLowerCase() && isNaN(character)) ?
-        /[a-z]/.test(passwordInput) ?
-            setValidation(prevValidation => ({ ...prevValidation, lowerChar: true })) :
-            setValidation(prevValidation => ({ ...prevValidation, lowerChar: false }));
+        // // passwordInput.split("").find((character) => character === character.toLocaleLowerCase() && isNaN(character)) ?
+        // /[a-z]/.test(passwordInput) ?
+        //     setValidation({...validation, lowerChar: true}) :
+        //     setValidation({...validation, lowerChar: false});
 
-        passwordInput.split("").find((character) => !isNaN(character)) ?
-            setValidation((prevValidation) => ({ ...prevValidation, numberChar: true })) :
-            setValidation((prevValidation) => ({ ...prevValidation, numberChar: false }));
+        // passwordInput.split("").find((character) => !isNaN(character)) ?
+        //     setValidation({...validation, numberChar: true}) :
+        //     setValidation({...validation, numberChar: false});
+
+        setValidation(validation => ({
+            ...validation,
+            length: passwordInput.length > 7 && passwordInput.length < 20,
+            specialChar: specialCharacters.some((character) => passwordInput.includes(character)),
+            upperChar: /[A-Z]/.test(passwordInput),
+            lowerChar: /[a-z]/.test(passwordInput),
+            numberChar: passwordInput.split("").some((character) => !isNaN(character))
+          }));
 
     }, [passwordInput, verifyPasswordInput]);
 
 
     useEffect(() => {
-        const checkPasswordMatchResult = checkPasswordMatch(validation);
-        setPasswordMatch(checkPasswordMatchResult);
+        console.log(validation);
+        // const checkPasswordMatchResult = checkPasswordMatch(validation);
+        // setPasswordMatch(checkPasswordMatchResult);
+        setPasswordMatch(checkPasswordMatch);
     }, [validation]);
 
     const checkPasswordMatch = (validationState) => {
@@ -321,10 +333,10 @@ export const ResetPassVMware = () => {
         if (passwordInput != "" &&
             passwordInput === verifyPasswordInput &&
             Object.values(validationState).every(val => val === true)) {
-            submitButtonRef.current.disabled = false;
+            // submitButtonRef.current.disabled = false;
             return true;
         } else {
-            submitButtonRef.current.disabled = true;
+            // submitButtonRef.current.disabled = true;
             return false;
         }
 
@@ -332,7 +344,11 @@ export const ResetPassVMware = () => {
 
     const showPassword = (e) => {
         (inputPasswordRef.current.type == 'text') ? inputPasswordRef.current.type = 'password' : inputPasswordRef.current.type = 'text';
-
+        // if (inputPasswordRef.current.type == 'text') {
+        //     inputPasswordRef.current.type = 'password' 
+        // } else{
+        //     inputPasswordRef.current.type = 'text';
+        // } 
     }
 
     const showVerifyPassword = (e) => {
@@ -345,8 +361,6 @@ export const ResetPassVMware = () => {
         console.log(`Password is ${passwordInput}`);
         setPasswordInput("");
         setVerifyPasswordInput("");
-
-
     }
 
     return (
@@ -358,10 +372,10 @@ export const ResetPassVMware = () => {
 
             <div className='row'>
 
-                <div className='col-6'>
+                <div className='col-12 col-sm-6'>
                     <form ref={formRef} onSubmit={handleSubmit}>
                         <div className='d-flex flex-column align-items-start mb-3'>
-                            <p className='-e'>{passwordsMatch ? <MdCheck /> : <MdError />} Authentincation code verified</p>
+                            <p className='-e'>{passwordsMatch ? <MdCheck style={{color:"green"}} /> : <MdError style={{color:"red"}}/>} Authentincation code verified</p>
                             <p>New Password:</p>
                             <div className="input-inner-container">
                                 <input
@@ -389,7 +403,7 @@ export const ResetPassVMware = () => {
                             </div>
                         </div>
                         <div className='d-flex justify-content-start my-3'>
-                            <input ref={submitButtonRef} type="submit" value="Submit" className='btn btn-primary'></input>
+                            <input ref={submitButtonRef} type="submit" value="Submit" className='btn btn-primary' disabled={!passwordsMatch}></input>
                         </div>
 
                     </form>
@@ -397,7 +411,7 @@ export const ResetPassVMware = () => {
 
 
 
-                <div className='col-6'>
+                <div className='col-12 col-sm-6'>
                     <p>Password must contain al least</p>
 
                     <ul className='d-flex flex-column align-items-start'>
