@@ -1,9 +1,14 @@
 import React from 'react'
+import './ToDoCard.css'
 
-const ToDoCard = () => {
+const ToDoCard = ({todoItem}) => {
   return (
-    <div>
-      <h3>ToDo Task</h3>
+    <div className='item-container'>
+      <h5>ToDo Task</h5>
+      <p>Solicitante: {todoItem.openByName}</p>
+      <p>Servicio: {todoItem.openByArea}</p>
+      <p>Producto: {todoItem.product}</p>
+      <p>Detalles: {todoItem.details}</p>
     </div>
   )
 }

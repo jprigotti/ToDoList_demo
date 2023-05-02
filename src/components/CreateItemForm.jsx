@@ -1,24 +1,23 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect} from 'react'
 import './CreateItemForm.css'
 
-const CreateItemForm = () => {
+const CreateItemForm = ({ todoList, setTodoList }) => {
 
-    const formInitialState = {
+    const todoItemInitialState = {
         openByName: "",
         openByArea: "",
         product: "",
         details: "",
     }
 
-    const [form, setForm] = useState(formInitialState);
-    const [createItemFormVisibility, setCreateItemFormVisibility] = useState(false);
-
+    const [todoItem, setTodoItem] = useState(todoItemInitialState);
     const formRef = useRef(null);
 
+    // FUNCTIONS
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setForm({
-            ...form,
+        setTodoItem({
+            ...todoItem,
             [name]: value,
         })
     }
@@ -27,17 +26,11 @@ const CreateItemForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        console.log("Submitted");
-        console.log(form);
-
-        const tempForm = form;
-        for (const key in tempForm) {
-            tempForm[key] = "";
-        }
-        setForm(tempForm)
+        console.log("todoItem is:", todoItem);
+        setTodoList([...todoList, todoItem]);
 
         handleReset();
-        console.log(form);
+
     }
 
     const handleReset = () => {
@@ -57,6 +50,7 @@ const CreateItemForm = () => {
                         placeholder='Ingrese su nombre'
                         name="openByName"
                         onBlur={handleChange}
+                        required
                     ></input>
 
                     <input
@@ -64,6 +58,7 @@ const CreateItemForm = () => {
                         placeholder='ingrese el servicio'
                         name="openByArea"
                         onBlur={handleChange}
+                        required
                     ></input>
 
                     <input
@@ -71,12 +66,14 @@ const CreateItemForm = () => {
                         placeholder='ingrese el producto'
                         name="product"
                         onBlur={handleChange}
+                        required
                     ></input>
                     <input
                         type="text"
                         placeholder='ingrese los detalles'
                         name="details"
                         onBlur={handleChange}
+                        required
                     ></input>
 
                     <input type="submit" value="Submit"></input>

@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './Header.css'
 import CreateItemForm from './CreateItemForm';
 
-const Header = () => {
+const Header = ({todoList, setTodoList}) => {
 
     const [createItemFormVisibility, setCreateItemFormVisibility] = useState(false);
     const btnAddRef = useRef(null);
@@ -25,7 +25,7 @@ const Header = () => {
                 </div>
             </div>
 
-            {createItemFormVisibility && <CreateItemForm />}
+            {createItemFormVisibility && <CreateItemForm todoList={todoList} setTodoList={setTodoList} />}
         </div>
     )
 }
