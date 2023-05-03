@@ -1,9 +1,10 @@
-import React, { useState, useRef, useEffect} from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import './CreateItemForm.css'
 
 const CreateItemForm = ({ todoList, setTodoList }) => {
 
     const todoItemInitialState = {
+        id: "",
         openByName: "",
         openByArea: "",
         product: "",
@@ -26,17 +27,19 @@ const CreateItemForm = ({ todoList, setTodoList }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        console.log("todoItem is:", todoItem);
-        setTodoList([...todoList, todoItem]);
-
+        if (todoList.length > 0) {
+            const lastObject = todoList[todoList.length - 1];
+            setTodoList([...todoList, { ...todoItem, id: lastObject.id + 1 }]);
+        } else {
+            setTodoList([...todoList, { ...todoItem, id: 1 }]);
+        };
         handleReset();
-
     }
+
 
     const handleReset = () => {
         formRef.current.reset();
     }
-
 
 
     return (

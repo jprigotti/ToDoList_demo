@@ -9,3 +9,17 @@ p{
     border: 1px solid black;
     border-radius: 5px;;
 }
+
+.item-controls{
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-icon{
+    background: none;
+    border: none;
+}
+
+.btn-icon:hover{
+
+}
